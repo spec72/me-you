@@ -2,11 +2,12 @@
 
 import React, { Component } from "react";
 
-import { Platform, StyleSheet, Text, Image, View, ScrollView } from "react-native";
+import { Platform, StyleSheet, Text, Image, View, ScrollView, StatusBar } from "react-native";
 import Button from "react-native-button";
 
 import styles from "./style";
 import Assets from "@assets";
+import { NavBar } from '@components';
 import { Colors, Metrics } from "@theme";
 
 export default class WelcomeScreen extends Component {
@@ -24,24 +25,27 @@ export default class WelcomeScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.imgContainer}>
-          <Image source={Assets.welcome} style={styles.img} resizeMode="cover"/>
-        </View>
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>Welcome in app Me&amp;you</Text>
-        </View>
-        <View style={styles.descContainer}>
-          <ScrollView style={{paddingLeft: Metrics.leftPadding, paddingRight: Metrics.rightPadding}}>
-            <Text style={styles.description}>{this.description}</Text>
-          </ScrollView>
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button
-            containerStyle={styles.nextBtn}
-            style={{fontSize: 20, color: 'white'}}
-            onPress={() => this.onNextBtnClicked()}>
-            Next
-          </Button>
+        <NavBar title="Welcome"/>
+        <View style={{flex:1, flexDirection:'column'}}>
+          <View style={styles.imgContainer}>
+            <Image source={Assets.welcome} style={styles.img} resizeMode="center"/>
+          </View>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>Welcome in app Me&amp;you</Text>
+          </View>
+          <View style={styles.descContainer}>
+            <ScrollView style={{paddingLeft: Metrics.padding, paddingRight: Metrics.padding}}>
+              <Text style={styles.description}>{this.description}</Text>
+            </ScrollView>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button
+              containerStyle={styles.nextBtn}
+              style={{fontSize: 20, color: 'white'}}
+              onPress={() => this.onNextBtnClicked()}>
+              Next
+            </Button>
+          </View>
         </View>
       </View>
     );   

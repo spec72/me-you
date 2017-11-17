@@ -1,5 +1,6 @@
-'use strict';
+"use strict";
 
-import RootNavigator from './RootNavigator';
+import RootNavigator from "./RootNavigator";
+import NavBar from "./NavBar";
 
-export { RootNavigator };
+export { RootNavigator, NavBar };

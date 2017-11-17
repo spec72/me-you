@@ -3,6 +3,9 @@ package com.youandme;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import fr.bamlab.rnimageresizer.ImageResizerPackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import io.invertase.firebase.RNFirebasePackage;
 import com.imagepicker.ImagePickerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -24,6 +27,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ImageResizerPackage(),
+            new RNFetchBlobPackage(),
+            new RNFirebasePackage(),
             new ImagePickerPackage()
       );
     }

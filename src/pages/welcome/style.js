@@ -5,25 +5,26 @@ import { Metrics, Colors } from "@theme";
 export default StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: "center",
-    backgroundColor: Colors.bgColor
+    flexDirection: 'column',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.bgColor,
   },
   imgContainer: {
     flex: 0.2,
+    width: Metrics.screenWidth,
     alignItems: "center",
     justifyContent: "center",
   },
   img: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    flex: 1
   },
   titleContainer: {
     flex: 0.1,
     // alignItems: "center",
     justifyContent: "center",
-    paddingLeft: Metrics.leftPadding,
-    paddingRight: Metrics.rightPadding,
+    paddingLeft: Metrics.padding,
+    paddingRight: Metrics.padding,
   },
   title: {
     fontSize: 18,

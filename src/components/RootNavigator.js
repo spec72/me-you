@@ -7,6 +7,7 @@ import WelcomeScreen from "@pages/welcome";
 import TermsScreen from "@pages/terms";
 import PrivacyPolicyScreen from "@pages/privacy";
 import ProfileScreen from "@pages/profile";
+import HomeScreen from "@pages/home";
 
 const RootNavigator = StackNavigator({
   Welcome: {
@@ -36,12 +37,15 @@ const RootNavigator = StackNavigator({
       headerLeft: null,
     },
   },
+  Home: {
+    screen: HomeScreen
+  }
 }, {
   navigationOptions: {
     gesturesEnabled: false,
   },
   initialRouteName: "Welcome",
-  headerMode: Platform.OS=='ios' ? 'float' : 'screen',
+  headerMode: 'none',
 });
 
 export default RootNavigator;

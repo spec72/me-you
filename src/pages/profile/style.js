@@ -13,8 +13,8 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingLeft: Metrics.leftPadding,
-    paddingTop: Metrics.topPadding,
+    paddingLeft: Metrics.padding,
+    paddingTop: Metrics.padding,
   },
   avatar: {
     width: Metrics.avatarWidth,
@@ -26,7 +26,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingLeft: Metrics.leftPadding
+    paddingLeft: Metrics.padding
   },
   nameinput: {
     width: Metrics.screenWidth - Metrics.avatarWidth - 40, 
@@ -37,7 +37,7 @@ export default StyleSheet.create({
   birthyearLabel: {
     flex: 0.075,
     justifyContent: 'center',
-    paddingLeft: Metrics.leftPadding,
+    paddingLeft: Metrics.padding,
   },
   birthyearPicker: {
     flex: 0.3,
@@ -47,15 +47,15 @@ export default StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingLeft: Metrics.leftPadding,
-    paddingRight: Metrics.rightPadding,
+    paddingLeft: Metrics.padding,
+    paddingRight: Metrics.padding,
   },
   buttonContainer: {
     flex: 0.1,
     flexDirection: 'column',
     alignItems: 'flex-start',
     justifyContent: 'center',
-    paddingLeft: Metrics.leftPadding
+    paddingLeft: Metrics.padding,
   },
   saveBtn: {
     width: Metrics.bottomButtonWidth,
@@ -63,5 +63,16 @@ export default StyleSheet.create({
     overflow: "hidden",
     borderRadius: 5,
     backgroundColor: Colors.btnColor,
-  }
+  },
+  progressbarContainer: {
+    position:'absolute', 
+		left:0, 
+		right:0, 
+		top:0, 
+		bottom:0, 
+		backgroundColor: 'rgba(246, 135, 60, 0.8)',
+		flex: 1,
+		alignItems: 'center', 
+		justifyContent:'center' 
+  },
 });

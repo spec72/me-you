@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>608321922006-h68lbuo5ot79jcmcc1u52k6a1auj1tg7.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.608321922006-h68lbuo5ot79jcmcc1u52k6a1auj1tg7</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDj-NUEyjXudBgDMS8glG3PCrcqKV0g8Bw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>608321922006</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.YouAndMe</string>
+	<key>PROJECT_ID</key>
+	<string>youandme-6e4a2</string>
+	<key>STORAGE_BUCKET</key>
+	<string>youandme-6e4a2.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true></true>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false></false>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:608321922006:ios:e2a7a10a53e4afa3</string>
+	<key>DATABASE_URL</key>
+	<string>https://youandme-6e4a2.firebaseio.com</string>
+</dict>
+</plist>

@@ -5,6 +5,7 @@ import React, { Component } from "react";
 import { Platform, StyleSheet, Text, Image, View, ScrollView } from "react-native";
 import Button from "react-native-button";
 
+import { NavBar } from '@components';
 import styles from "./style";
 import Assets from "@assets";
 import { Colors, Metrics } from "@theme";
@@ -24,13 +25,14 @@ export default class PrivacyPolicyScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <NavBar title="Privacy Policy"/>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>
             Before continuing, please accept the Privacy Policy. 
           </Text>
         </View>
         <View style={styles.descContainer}>
-          <ScrollView style={{paddingLeft: Metrics.leftPadding, paddingRight: Metrics.rightPadding}}>
+          <ScrollView style={{paddingLeft: Metrics.padding, paddingRight: Metrics.padding}}>
             <Text style={styles.description}>{this.description}</Text>
           </ScrollView>
         </View>

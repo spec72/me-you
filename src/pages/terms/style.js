@@ -12,8 +12,8 @@ export default StyleSheet.create({
     flex: 0.15,
     // alignItems: "center",
     justifyContent: "center",
-    paddingLeft: Metrics.leftPadding,
-    paddingRight: Metrics.rightPadding,
+    paddingLeft: Metrics.padding,
+    paddingRight: Metrics.padding,
   },
   title: {
     fontSize: 18,
