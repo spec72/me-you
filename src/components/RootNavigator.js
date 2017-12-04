@@ -8,43 +8,40 @@ import TermsScreen from "@pages/terms";
 import PrivacyPolicyScreen from "@pages/privacy";
 import ProfileScreen from "@pages/profile";
 import HomeScreen from "@pages/home";
+import AboutScreen from "@pages/about";
+import TermsAndPrivacyScreen from "@pages/termsandprivacy";
+import YouScreen from "@pages/you";
 
 const RootNavigator = StackNavigator({
   Welcome: {
     screen: WelcomeScreen,
-    navigationOptions: {
-      headerTitle: "Welcome"
-    }
   },
   Terms: {
     screen: TermsScreen,
-    navigationOptions: {
-      headerTitle: "Terms & Conditions",
-      headerLeft: null,
-    }
   }, 
   Privacy: {
     screen: PrivacyPolicyScreen,
-    navigationOptions: {
-      headerTitle: "Privacy Policy",
-      headerLeft: null,
-    }
   },
   Profile: {
     screen: ProfileScreen,
-    navigationOptions: {
-      headerTitle: "Let's begin",
-      headerLeft: null,
-    },
   },
   Home: {
     screen: HomeScreen
-  }
+  },
+  About: {
+    screen: AboutScreen,
+  },
+  TermsAndPrivacy: {
+    screen: TermsAndPrivacyScreen,
+  },
+  You: {
+    screen: YouScreen,
+  },
 }, {
   navigationOptions: {
     gesturesEnabled: false,
   },
-  initialRouteName: "Welcome",
+  initialRouteName: "Home",
   headerMode: 'none',
 });
 

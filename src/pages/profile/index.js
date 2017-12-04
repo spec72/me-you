@@ -20,10 +20,19 @@ const Item = Picker.Item;
 
 import { FirebaseProvider } from "@provider/fireprovider";
 import { NavBar } from "@components";
+
 import Assets from "@assets";
 import { Metrics, Colors } from "@theme";
-
 import styles from "./style";
+
+var options = {
+  title: "Select Avatar",
+  customButtons: [{ name: "fb", title: "Choose Photo from Facebook" }],
+  storageOptions: {
+    skipBackup: true,
+    path: "images"
+  }
+};
 
 export default class ProfileScreen extends Component {
   yearList = [];
@@ -44,15 +53,6 @@ export default class ProfileScreen extends Component {
    * avatar clicked
    */
   avatarClicked() {
-    var options = {
-      title: "Select Avatar",
-      customButtons: [{ name: "fb", title: "Choose Photo from Facebook" }],
-      storageOptions: {
-        skipBackup: true,
-        path: "images"
-      }
-    };
-
     ImagePicker.launchImageLibrary(options, response => {
       // Same code as in above section!
       if (response.didCancel) {
@@ -109,75 +109,75 @@ export default class ProfileScreen extends Component {
       );
       return;
     }
-    /* For Test
-    navigate('Home'); */
+    // For Test
+    navigate('Home');
     
-    this.setState({
-      ...this.state,
-      progress: true
-    });
-    // Resizing the image and then save to the firebase db and storage
-    var uri = "";
-    if (this.state.avatarSource.uri == undefined) {
-      uri = this.state.avatarSource;
-    } else {
-      uri =
-        Platform.OS === "ios"
-          ? this.state.avatarSource.uri.replace("file://", "")
-          : this.state.avatarSource.uri;
-    }
+    // this.setState({
+    //   ...this.state,
+    //   progress: true
+    // });
+    // // Resizing the image and then save to the firebase db and storage
+    // var uri = "";
+    // if (this.state.avatarSource.uri == undefined) {
+    //   uri = this.state.avatarSource;
+    // } else {
+    //   uri =
+    //     Platform.OS === "ios"
+    //       ? this.state.avatarSource.uri.replace("file://", "")
+    //       : this.state.avatarSource.uri;
+    // }
 
-    ImageResizer.createResizedImage(uri, 300, 300, "JPEG", 80)
-      .then(response => {
-        console.log("response", response);
-        this.setState({
-          ...this.state,
-          avatarSource: { uri: response.uri }
-        });
-        FirebaseProvider.addUser(
-          response.uri,
-          this.state.name,
-          this.state.curYear,
-          this.state.gender
-        )
-          .then(res => {
-            this.setState({
-              ...this.state,
-              progress: false
-            });
-            navigate("Home");
-          })
-          .catch(error => {
-            Alert.alert(
-              "Error",
-              error,
-              [
-                {
-                  text: "OK",
-                  onPress: () => {
-                    console.log(error);
-                  }
-                }
-              ],
-              { cancelable: false }
-            );
-          });
-      })
-      .catch(err => {
-        Alert.alert(
-          "Error",
-          err,
-          [
-            {
-              text: "OK",
-              onPress: () => {
-                console.log(err);
-              }
-            }
-          ],
-          { cancelable: false }
-        );
-      });
+    // ImageResizer.createResizedImage(uri, 300, 300, "JPEG", 80)
+    //   .then(response => {
+    //     console.log("response", response);
+    //     this.setState({
+    //       ...this.state,
+    //       avatarSource: { uri: response.uri }
+    //     });
+    //     FirebaseProvider.addUser(
+    //       response.uri,
+    //       this.state.name,
+    //       this.state.curYear,
+    //       this.state.gender
+    //     )
+    //       .then(res => {
+    //         this.setState({
+    //           ...this.state,
+    //           progress: false
+    //         });
+    //         navigate("Home");
+    //       })
+    //       .catch(error => {
+    //         Alert.alert(
+    //           "Error",
+    //           error,
+    //           [
+    //             {
+    //               text: "OK",
+    //               onPress: () => {
+    //                 console.log(error);
+    //               }
+    //             }
+    //           ],
+    //           { cancelable: false }
+    //         );
+    //       });
+    //   })
+    //   .catch(err => {
+    //     Alert.alert(
+    //       "Error",
+    //       err,
+    //       [
+    //         {
+    //           text: "OK",
+    //           onPress: () => {
+    //             console.log(err);
+    //           }
+    //         }
+    //       ],
+    //       { cancelable: false }
+    //     );
+    //   });
   }
 
   render() {
@@ -190,7 +190,7 @@ export default class ProfileScreen extends Component {
             onPress={this.avatarClicked.bind(this)}
           >
             <Image
-              source={this.state.avatarSource}
+              source={this.state.avatarSource == "" ? Assets.avatar : this.state.avatarSource}
               resizeMode="cover"
               style={styles.avatar}
             />
