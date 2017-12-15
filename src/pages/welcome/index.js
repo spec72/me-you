@@ -28,7 +28,7 @@ export default class WelcomeScreen extends Component {
         <NavBar title="Welcome"/>
         <View style={{flex:1, flexDirection:'column'}}>
           <View style={styles.imgContainer}>
-            <Image source={Assets.welcome} style={styles.img} resizeMode="center"/>
+            <Image source={Assets.welcome} style={styles.img} resizeMode="cover"/>
           </View>
           <View style={styles.titleContainer}>
             <Text style={styles.title}>Welcome in app Me&amp;you</Text>

@@ -54,11 +54,13 @@ export default class NavBar extends Component {
 const styles = StyleSheet.create({
   topbar: {
     width: Metrics.screenWidth,
+    flex: 0,
     height: Metrics.navbarHeight + Metrics.statusbarHeight,
     backgroundColor: Colors.barColor
   },
   navbar: {
     backgroundColor: Colors.barColor,
+    flex: 0,
     width: Metrics.screenWidth,
     height: Metrics.navbarHeight,
     borderBottomColor: Colors.borderColor,
@@ -84,12 +86,12 @@ const styles = StyleSheet.create({
     color: Colors.titleColor
   },
   left: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "400",
     color: "#9B9B9B",
   },
   right: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "400",
     color: "#F6873C",
   },

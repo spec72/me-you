@@ -61,7 +61,7 @@ export default StyleSheet.create({
     width: Metrics.bottomButtonWidth,
     padding: 10,
     overflow: "hidden",
-    borderRadius: 5,
+    borderRadius: 10,
     backgroundColor: Colors.btnColor,
   },
   progressbarContainer: {

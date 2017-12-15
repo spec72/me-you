@@ -11,6 +11,8 @@ import HomeScreen from "@pages/home";
 import AboutScreen from "@pages/about";
 import TermsAndPrivacyScreen from "@pages/termsandprivacy";
 import YouScreen from "@pages/you";
+import NotificationScreen from "@pages/notification";
+import ActionsScreen from "@pages/actions";
 
 const RootNavigator = StackNavigator({
   Welcome: {
@@ -37,6 +39,12 @@ const RootNavigator = StackNavigator({
   You: {
     screen: YouScreen,
   },
+  Notification: {
+    screen: NotificationScreen
+  },
+  Actions: {
+    screen: ActionsScreen
+  }
 }, {
   navigationOptions: {
     gesturesEnabled: false,

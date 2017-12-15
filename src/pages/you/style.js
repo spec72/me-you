@@ -5,11 +5,10 @@ import { Metrics, Colors } from "@theme";
 export default StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: "center",
     backgroundColor: Colors.bgColor
   },
   avatarContainer: {
-    flex: 0.15,
+    height: Metrics.avatarWidth,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -21,4 +20,19 @@ export default StyleSheet.create({
     height: Metrics.avatarWidth,
     borderRadius: Metrics.avatarWidth / 2,
   },
+  imageContainer: {
+    height: 200,
+    marginTop: 10,
+    marginBottom: 10,
+    borderRadius: 5,
+    borderWidth: 0.5,
+    borderStyle: "dashed",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  image: {
+    height: 200,
+    marginTop: 10,
+    marginBottom: 10,
+  }
 });

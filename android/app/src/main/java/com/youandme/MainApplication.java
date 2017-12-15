@@ -3,6 +3,8 @@ package com.youandme;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactlibrary.RNRatePackage;
+import cl.json.RNSharePackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import io.invertase.firebase.RNFirebasePackage;
@@ -27,6 +29,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNRatePackage(),
+            new RNSharePackage(),
             new ImageResizerPackage(),
             new RNFetchBlobPackage(),
             new RNFirebasePackage(),

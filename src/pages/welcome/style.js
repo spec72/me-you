@@ -17,7 +17,8 @@ export default StyleSheet.create({
     justifyContent: "center",
   },
   img: {
-    flex: 1
+    flex: 1,
+    width: Metrics.screenWidth,
   },
   titleContainer: {
     flex: 0.1,
@@ -42,7 +43,7 @@ export default StyleSheet.create({
     width: Metrics.bottomButtonWidth,
     padding: 10,
     overflow: "hidden",
-    borderRadius: 5,
+    borderRadius: 10,
     backgroundColor: Colors.btnColor,
   }
 });

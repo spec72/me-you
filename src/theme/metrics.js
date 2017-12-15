@@ -11,7 +11,7 @@ const metrics = {
   navbarHeight: 44,
   padding: 10,
   bottomButtonWidth: width - 20,
-  avatarWidth: height * 0.15 - 20,
+  avatarWidth: 60,
   spinnerSize: width * 0.5,
 };
 

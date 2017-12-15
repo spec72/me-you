@@ -2,13 +2,13 @@
 
 import { combineReducers } from "redux";
 
-import users from "./users";
+import usersReducer from "./users";
+import youReducer from "./you";
 import { createReducer } from "reduxsauce";
 
-const appReducer = {
-  users,
-};
-
-const createReducers = () => (combineReducers(appReducer));
+const createReducers = () => (combineReducers({
+  usersReducer,
+  youReducer,
+}));
 
 export default createReducers;

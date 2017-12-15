@@ -9,11 +9,16 @@ import {
   Image,
   View,
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
+  TextInput,
+  AsyncStorage
 } from "react-native";
 import Button from "react-native-button";
 import { NavBar } from "@components";
 import ImagePicker from "react-native-image-picker";
+import { connect } from "react-redux";
+
+import { imageSet, affirmationSet } from "@actions/you";
 
 import styles from "./style";
 import Assets from "@assets";
@@ -28,15 +33,29 @@ let options = {
   }
 };
 
-export default class YouScreen extends Component {
-  constructor() {
-    super();
+class YouScreen extends Component {
+  constructor(props) {
+    super(props);
+
+    let userInfo = props.navigation.state.params.userInfo;
+
+    console.log("You", userInfo);
+    
+    if (userInfo && userInfo.image) {
+      this.state = {
+        avatarSource: "",
+        imageSource: userInfo.image
+      };
+      return;
+    }
+
     this.state = {
-      avatarSource: ""
+      avatarSource: "",
+      imageSource: ""
     };
   }
 
-  description = "\nHello, I am here for you.  Let's do this together.	\n\nBad time, needed to change the neural pathways to stop thinking same bad thoughts; scientifically….\n\nYour affirmations and your images change as you go along.  I encourage you to change them and keep them fresh.  Evolve!\n\nwe all have our own story and reasons why we are now feeling this way.  What we feel though, can be similar in many cases.   If any of you, like me, felt loss - loss of my familiar world, loss of self-esteem, loss of confidence….If you feel fear - fear of being alone, fear of no longer knowing any single friends, fear of not going to find love again, fear of not being able to pay bills on your own…. If any of you feel lonely - not having anyone to talk to, to have dinner with, to cuddle with, to touch you, to share a smile with then perhaps I can help.  Because I used to consider myself a strong person but suddenly I felt all that… and I felt very small, very lost, very afraid.  I knew the road immediately ahead was going to be difficult, but I was just seeing darkness and was beginning to believe that the whole road for the rest of my life was going to be difficult.  So, I had to fight for myself to get unstuck from that situation.  and today, I feel that it was all so necessary to build the me who has stronger foundations…and the me who feels truly happy and content inside, even if I am still on my own.  It took a while for me to get to this truly happy state - and I am grateful for the trauma that i went through, because i doubt that i would have reached this happy state ever.  Here I am now though - and I've learnt a lot along the way and that is why I have created this app.  Number one lesson I learnt is that needed constant reminders to get out of my thinking rut.  I hope that I can help you along the way to 										";
+  description = "Change them as often as you need and set up a reminder to remind you daily.  Put the focus on what you want in life and add your affirmation as though you already have it – feel it and the happiness it is giving you because you have achieved it.\n\nInsert an image that makes you feel happy and that you can visualise in your mind when your mind needs to focus on something positive.  This could be your vision board too.";
 
   avatarClicked() {
     ImagePicker.launchImageLibrary(options, response => {
@@ -52,20 +71,65 @@ export default class YouScreen extends Component {
         console.log('User tapped custom button: ', response.customButton);
       }
       else {
-        let source = { uri: response.uri };
-    
         // You can also display the image using data:
         // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-    
         this.setState({
-          avatarSource: source
+          avatarSource: { uri: response.uri }
         });
       }
     });
   };
 
-  setTime() {
-    
+  selectImage() {
+    ImagePicker.launchImageLibrary(options, response => {
+      console.log('Response = ', response);
+      
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      }
+      else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      }
+      else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      }
+      else {
+        this.setState({
+          imageSource: { uri: response.uri }
+        });
+      }
+    });
+  }
+
+  goToNotification(){
+    this.props.navigation.navigate("Notification");
+  }
+
+  goBack() {
+    var userInfo = Object.assign({}, this.props.navigation.state.params.userInfo);
+    if (this.state.imageSource) {
+      userInfo.image = this.state.imageSource;
+    }
+
+    AsyncStorage.setItem("userInfo", JSON.stringify(userInfo), (error) => {
+      if (error) {
+        Alert.alert(
+          "Error",
+          "Failed to save to the local storage.",
+          [
+            { 
+              text: 'OK', 
+              onPress: () => {
+                console.log("You - localstorage saving error");
+              }
+            }
+          ],
+          { cancelable: false }
+        );
+      }
+      this.props.navigation.state.params.refresh();
+      this.props.navigation.goBack();
+    });
   }
 
   render() {
@@ -74,38 +138,89 @@ export default class YouScreen extends Component {
         <NavBar
           title="Robert"
           left="Back"
-          onLeft={ () => this.props.navigation.goBack() }
+          onLeft={ () => this.goBack() }
           right="Set time"
-          onRight={ this.setTime.bind(this) }
+          onRight={ this.goToNotification.bind(this) }
         />
-
-        <View style={styles.avatarContainer}>
-          <TouchableOpacity
-            style={styles.avatar}
-            onPress={this.avatarClicked.bind(this)}
-          >
-            <Image
-              source={this.state.avatarSource == "" ? Assets.avatar : this.state.avatarSource}
-              resizeMode="cover"
-              style={styles.avatar}
-            />
-          </TouchableOpacity>
-          <Text style={{ fontSize: 16, marginLeft: 10, color: "#2a2a2a" }}>
-            Tap to add your photo
-          </Text>
-        </View>
-
-        {/* <View style={styles.descContainer}>
-          <ScrollView
-            style={{
-              paddingLeft: Metrics.padding,
-              paddingRight: Metrics.padding
-            }}
-          >
-            <Text style={styles.description}>{this.description}</Text>
+        <View style={{flex: 1, width: Metrics.screenWidth}}>
+          <ScrollView style={{paddingHorizontal: Metrics.padding}}>
+            <View style={styles.avatarContainer}>
+              <TouchableOpacity
+                style={styles.avatar}
+                onPress={this.avatarClicked.bind(this)}
+              >
+                <Image
+                  source={this.state.avatarSource == "" ? Assets.avatar : this.state.avatarSource}
+                  resizeMode="cover"
+                  style={styles.avatar}
+                />      
+              </TouchableOpacity>
+              <Text style={{ fontSize: 14, marginLeft: 10, color: "#2a2a2a" }}>
+                Tap to add your photo
+              </Text>
+            </View>
+            <Text style={{fontSize: 16, fontWeight: "600", marginTop: 10, lineHeight: 40}}>
+              Only use positive words/images
+            </Text>
+            <Text style={{fontSize: 14}}>
+              {this.description}
+            </Text>
+            <View style={{flexDirection: "row", alignItems: "center", justifyContent:"space-between", marginTop: 10}}>
+              <Text style={{fontSize: 16, fontWeight: "600"}}>
+                Add your own affirmation:
+              </Text>
+              <Text style={{fontSize: 12, fontWeight: "bold"}}>
+                {"Remind me: "}
+                <Text style={{fontSize: 12, fontWeight: "normal"}}>
+                  10:00
+                </Text>
+              </Text>
+            </View>
+            <TextInput 
+              multiline={true}
+              numberOfLines={10}
+              placeholder="For example, I am fulfilled inside or I’ve got what it takes or I’ve let it go and I am happy"
+              style={{ height: 100, marginTop: 10, fontStyle: "italic"}}
+              />
+            <View style={{flexDirection: "row", alignItems: "center", justifyContent:"space-between", marginTop: 10}}>
+              <Text style={{fontSize: 16, fontWeight: "600"}}>
+                Add your own image:
+              </Text>
+              <Text style={{fontSize: 12, fontWeight: "bold"}}>
+                {"Remind me: "}
+                <Text style={{fontSize: 12, fontWeight: "normal"}}>
+                  12:00
+                </Text>
+              </Text>
+            </View>
+            {
+              this.state.imageSource
+              ?
+              <TouchableOpacity onPress={this.selectImage.bind(this)}>
+                <Image source={this.state.imageSource} style={ styles.image } resizeMode="cover" />
+              </TouchableOpacity>
+              :
+              <View style={ styles.imageContainer }>
+                <TouchableOpacity onPress={this.selectImage.bind(this)}>
+                  <Text style={{fontSize: 16, color: Colors.btnColor}}>
+                    Tap here to add an image
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            }
           </ScrollView>
-        </View> */}
+        </View>
       </View>
     );
   }
 }
+
+const mapDispatchToProps = (dispatch, props) => {
+  return ({
+    // setImage: image => dispatch(imageSet(image)),
+    // setAffirmation: affirmation => dispatch(affirmationSet(affirmation))
+  });
+}
+
+export default connect(null, mapDispatchToProps) (YouScreen);
+
