@@ -141,6 +141,7 @@ class HomeScreen extends Component {
         navigation.navigate("TermsAndPrivacy");
         break;
       default:
+        navigation.navigate("Feedback");
         break;
     }
   }
@@ -288,6 +289,7 @@ class HomeScreen extends Component {
               GEORGE ELIOT I believe that we all reach certain key points in our
               lives.
             </Text>
+            <Image style={{marginTop:10, height: 100, width: Metrics.screenWidth - 40}} source={Assets.welcome} resizeMode="cover" />
           </View>
           <Image
             source={Assets.triangle}

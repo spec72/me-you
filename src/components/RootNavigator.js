@@ -13,6 +13,7 @@ import TermsAndPrivacyScreen from "@pages/termsandprivacy";
 import YouScreen from "@pages/you";
 import NotificationScreen from "@pages/notification";
 import ActionsScreen from "@pages/actions";
+import FeedbackScreen from "@pages/feedback";
 
 const RootNavigator = StackNavigator({
   Welcome: {
@@ -44,6 +45,9 @@ const RootNavigator = StackNavigator({
   },
   Actions: {
     screen: ActionsScreen
+  },
+  Feedback: {
+    screen: FeedbackScreen
   }
 }, {
   navigationOptions: {

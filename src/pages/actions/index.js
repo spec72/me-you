@@ -14,8 +14,7 @@ import {
   TouchableOpacity,
   AsyncStorage,
   Clipboard,
-  ImageBackground,
-  ListView
+  ImageBackground
 } from "react-native";
 import { SwipeRow } from 'react-native-swipe-list-view';
 
