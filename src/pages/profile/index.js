@@ -9,13 +9,15 @@ import {
   Picker,
   Alert,
   Platform,
-  TouchableHighlight
+  TouchableHighlight,
+  AsyncStorage
 } from "react-native";
 import SegmentedControlTab from "react-native-segmented-control-tab";
 import Button from "react-native-button";
 import ImagePicker from "react-native-image-picker";
 import { Circle } from "react-native-progress";
 import ImageResizer from "react-native-image-resizer";
+import RNFetchBlob from "react-native-fetch-blob";
 const Item = Picker.Item;
 
 import { FirebaseProvider } from "@provider/fireprovider";
@@ -25,14 +27,10 @@ import Assets from "@assets";
 import { Metrics, Colors } from "@theme";
 import styles from "./style";
 
-var options = {
-  title: "Select Avatar",
-  customButtons: [{ name: "fb", title: "Choose Photo from Facebook" }],
-  storageOptions: {
-    skipBackup: true,
-    path: "images"
-  }
-};
+const Blob = RNFetchBlob.polyfill.Blob;
+const fs = RNFetchBlob.fs;
+window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
+window.Blob = Blob;
 
 export default class ProfileScreen extends Component {
   yearList = [];
@@ -53,6 +51,14 @@ export default class ProfileScreen extends Component {
    * avatar clicked
    */
   avatarClicked() {
+    var options = {
+      title: "Select Avatar",
+      customButtons: [{ name: "fb", title: "Choose Photo from Facebook" }],
+      storageOptions: {
+        skipBackup: true,
+        path: "images"
+      }
+    };
     ImagePicker.launchImageLibrary(options, response => {
       // Same code as in above section!
       if (response.didCancel) {
@@ -110,74 +116,105 @@ export default class ProfileScreen extends Component {
       return;
     }
     // For Test
-    navigate('Home');
-    
-    // this.setState({
-    //   ...this.state,
-    //   progress: true
-    // });
-    // // Resizing the image and then save to the firebase db and storage
-    // var uri = "";
-    // if (this.state.avatarSource.uri == undefined) {
-    //   uri = this.state.avatarSource;
-    // } else {
-    //   uri =
-    //     Platform.OS === "ios"
-    //       ? this.state.avatarSource.uri.replace("file://", "")
-    //       : this.state.avatarSource.uri;
-    // }
+  
+    this.setState({
+      ...this.state,
+      progress: true
+    });
+    // Resizing the image and then save to the firebase db and storage
+    var uri = "";
+    if (this.state.avatarSource.uri == undefined) {
+      uri = this.state.avatarSource;
+    } else {
+      uri =
+        Platform.OS === "ios"
+          ? this.state.avatarSource.uri.replace("file://", "")
+          : this.state.avatarSource.uri;
+    }
 
-    // ImageResizer.createResizedImage(uri, 300, 300, "JPEG", 80)
-    //   .then(response => {
-    //     console.log("response", response);
-    //     this.setState({
-    //       ...this.state,
-    //       avatarSource: { uri: response.uri }
-    //     });
-    //     FirebaseProvider.addUser(
-    //       response.uri,
-    //       this.state.name,
-    //       this.state.curYear,
-    //       this.state.gender
-    //     )
-    //       .then(res => {
-    //         this.setState({
-    //           ...this.state,
-    //           progress: false
-    //         });
-    //         navigate("Home");
-    //       })
-    //       .catch(error => {
-    //         Alert.alert(
-    //           "Error",
-    //           error,
-    //           [
-    //             {
-    //               text: "OK",
-    //               onPress: () => {
-    //                 console.log(error);
-    //               }
-    //             }
-    //           ],
-    //           { cancelable: false }
-    //         );
-    //       });
-    //   })
-    //   .catch(err => {
-    //     Alert.alert(
-    //       "Error",
-    //       err,
-    //       [
-    //         {
-    //           text: "OK",
-    //           onPress: () => {
-    //             console.log(err);
-    //           }
-    //         }
-    //       ],
-    //       { cancelable: false }
-    //     );
-    //   });
+    ImageResizer.createResizedImage(uri, 300, 300, "JPEG", 80)
+      .then(response => {
+        console.log("response", response);
+        this.setState({
+          ...this.state,
+          avatarSource: { uri: response.uri }
+        });
+        // Save user infos into the async storage
+        
+
+        const uploadUri = Platform.OS === "ios" ? response.uri.replace("file://", "") : response.uri;
+        let mime = "image/jpg";
+        fs.readFile(uploadUri, "base64")
+          .then(data => {
+            AsyncStorage.setItem("userinfo", JSON.stringify({
+              name: this.state.name,
+              curYear: this.state.curYear,
+              gender: this.state.gender,
+              avatar: `data:image/jpg;base64,${data}`,
+            }));
+
+            // return Blob.build(data, { type: `${mime};BASE64` });
+          })
+          .catch(error => {
+            Alert.alert(
+              "Error",
+              error,
+              [
+                {
+                  text: "OK",
+                  onPress: () => {
+                    console.log(error);
+                  }
+                }
+              ],
+              { cancelable: false }
+            );
+          });
+
+        FirebaseProvider.addUser(
+          response.uri,
+          this.state.name,
+          this.state.curYear,
+          this.state.gender
+        )
+          .then(res => {
+            this.setState({
+              ...this.state,
+              progress: false
+            });
+            navigate("Home");
+          })
+          .catch(error => {
+            Alert.alert(
+              "Error",
+              error,
+              [
+                {
+                  text: "OK",
+                  onPress: () => {
+                    console.log(error);
+                  }
+                }
+              ],
+              { cancelable: false }
+            );
+          });
+      })
+      .catch(err => {
+        Alert.alert(
+          "Error",
+          err,
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                console.log(err);
+              }
+            }
+          ],
+          { cancelable: false }
+        );
+      });
   }
 
   render() {

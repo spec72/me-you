@@ -9,11 +9,12 @@ import PrivacyPolicyScreen from "@pages/privacy";
 import ProfileScreen from "@pages/profile";
 import HomeScreen from "@pages/home";
 import AboutScreen from "@pages/about";
-import TermsAndPrivacyScreen from "@pages/termsandprivacy";
 import YouScreen from "@pages/you";
 import NotificationScreen from "@pages/notification";
 import ActionsScreen from "@pages/actions";
 import FeedbackScreen from "@pages/feedback";
+import TACScreen from "@pages/TAC";
+import PPScreen from "@pages/PP";
 
 const RootNavigator = StackNavigator({
   Welcome: {
@@ -34,9 +35,6 @@ const RootNavigator = StackNavigator({
   About: {
     screen: AboutScreen,
   },
-  TermsAndPrivacy: {
-    screen: TermsAndPrivacyScreen,
-  },
   You: {
     screen: YouScreen,
   },
@@ -48,12 +46,18 @@ const RootNavigator = StackNavigator({
   },
   Feedback: {
     screen: FeedbackScreen
+  },
+  TAC: {
+    screen: TACScreen
+  },
+  PP: {
+    screen: PPScreen
   }
 }, {
   navigationOptions: {
     gesturesEnabled: false,
   },
-  initialRouteName: "Home",
+  initialRouteName: "Welcome",
   headerMode: 'none',
 });
 

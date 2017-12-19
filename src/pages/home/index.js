@@ -35,15 +35,6 @@ import Assets from "@assets";
 import { Colors, Metrics } from "@theme";
 import { NavBar } from "../../components/index";
 
-// More info on all the options is below in the README...just some common use cases shown here
-var options = {
-  title: "Select Avatar",
-  customButtons: [{ name: "fb", title: "Choose Photo from Facebook" }],
-  storageOptions: {
-    skipBackup: true,
-    path: "images"
-  }
-};
 
 var shareOptions = {
   title: "Me & You",
@@ -71,7 +62,7 @@ class HomeScreen extends Component {
   }
 
   refresh() {
-    AsyncStorage.getItem("userInfo", (error, result) => {
+    AsyncStorage.getItem("userinfo", (error, result) => {
       if (error) {
         Alert.alert(
           "Error",
@@ -86,22 +77,30 @@ class HomeScreen extends Component {
           ],
           { cancelable: false }
         );
+        return;
       }
+
       let resultObj = JSON.parse(result);
+      console.log(resultObj);
+
       if (resultObj) {
         this.setState({
           ...this.state,
-          userInfo: resultObj
+          userInfo: resultObj,
         });
       }
-
+      if (resultObj && resultObj.avatar) {
+        this.setState({
+          ...this.state,
+          avatarSource: resultObj.avatar
+        });
+      }
       if (resultObj && resultObj.image) {
         this.setState({
           ...this.state,
           image: resultObj.image
         });
       }
-      console.log("Home", this.state.userInfo);
     });
   }
 
@@ -112,6 +111,34 @@ class HomeScreen extends Component {
       [{ text: "OK", onPress: () => {} }],
       { cancelable: false }
     );
+  }
+
+  //update the userinfo with the changed image
+  updateAsyncStorage(uri) {
+    var userInfo = Object.assign({}, this.state.userInfo);
+
+    return new Promise((resolve, reject) => {
+      let origin_uri = Platform.OS === "ios" ? uri.replace("file://", "") : uri;
+
+      ImageResizer.createResizedImage(origin_uri, 300, 300, "JPEG", 80)
+        .then(response => {
+          const uploadUri = Platform.OS === "ios" ? response.uri.replace("file://", "") : response.uri;
+          let mime = "image/jpg";
+          fs.readFile(uploadUri, "base64")
+            .then(data => {
+              console.log(data);
+
+              userInfo.avatar = `data:image/jpg;base64,${data}`;
+              AsyncStorage.setItem("userinfo", JSON.stringify(userInfo), (error) => {
+                if (error) reject(error);
+                else resolve();
+              });
+            })
+            .catch(error => {
+              reject(error);
+            });
+        });
+    });
   }
 
   menuClicked() {
@@ -138,10 +165,15 @@ class HomeScreen extends Component {
         this.openRateApp();
         break;
       case 4:
-        navigation.navigate("TermsAndPrivacy");
+        navigation.navigate("TAC");
+        break;
+      case 5:
+        navigation.navigate("PP");
+        break;
+      case 6:
+        navigation.navigate("Feedback");
         break;
       default:
-        navigation.navigate("Feedback");
         break;
     }
   }
@@ -151,9 +183,6 @@ class HomeScreen extends Component {
     //   ...this.state,
     //   socialshare: true
     // });
-    Share.open(shareOptions).catch(err => {
-      err && console.log(err);
-    });
   }
 
   onCancelShare() {
@@ -164,9 +193,15 @@ class HomeScreen extends Component {
   }
 
   avatarClicked() {
+    var options = {
+      title: "Select Avatar",
+      customButtons: [{ name: "fb", title: "Choose Photo from Facebook" }],
+      storageOptions: {
+        skipBackup: true,
+        path: "images"
+      }
+    };
     ImagePicker.launchImageLibrary(options, response => {
-      console.log("Response = ", response);
-
       if (response.didCancel) {
         console.log("User cancelled image picker");
       } else if (response.error) {
@@ -174,13 +209,14 @@ class HomeScreen extends Component {
       } else if (response.customButton) {
         console.log("User tapped custom button: ", response.customButton);
       } else {
-        let source = { uri: response.uri };
+        var userInfo = Object.assign({}, this.state.userInfo);
+        userInfo.avatar = `data:image/jpg;base64,${response.data}`;
 
-        // You can also display the image using data:
-        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-
+        AsyncStorage.setItem("userinfo", JSON.stringify(userInfo));
         this.setState({
-          avatarSource: source
+          ...this.state,
+          avatarSource: response.uri,
+          userInfo: userInfo
         });
       }
     });
@@ -211,7 +247,7 @@ class HomeScreen extends Component {
           <Image
             style={{ flex: 1, width: Metrics.screenWidth }}
             resizeMode="cover"
-            source={this.state.image}
+            source={{uri: this.state.image}}
           />
         ) : (
           <View style={styles.imgContainer}>
@@ -235,7 +271,7 @@ class HomeScreen extends Component {
                 <Image
                   source={Assets.menu}
                   resizeMode="cover"
-                  style={{ height: 50 }}
+                  style={{ height: 40 }}
                 />
                 <Text style={{ fontSize: 10, color: "#A6A6A6" }}>Actions</Text>
               </View>
@@ -251,15 +287,19 @@ class HomeScreen extends Component {
               <View style={{ alignItems: "center", justifyContent: "center" }}>
                 <Image
                   source={
-                    this.state.avatarSource == ""
-                      ? Assets.avatar
-                      : this.state.avatarSource
+                    { uri: this.state.avatarSource }
                   }
                   resizeMode="cover"
                   style={{ height: 40, width: 40, borderRadius: 20 }}
                 />
-                <Text style={{ fontSize: 10, color: "#A6A6A6", marginTop: 10 }}>
-                  James
+                <Text style={{ fontSize: 10, color: "#A6A6A6", marginTop: 5 }}>
+                  {
+                    this.state.userInfo
+                    ?
+                    this.state.userInfo.name
+                    :
+                    ""
+                  }
                 </Text>
               </View>
             </TouchableOpacity>

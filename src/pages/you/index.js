@@ -38,29 +38,32 @@ class YouScreen extends Component {
     super(props);
 
     let userInfo = props.navigation.state.params.userInfo;
-
-    console.log("You", userInfo);
     
-    if (userInfo && userInfo.image) {
-      this.state = {
-        avatarSource: "",
-        imageSource: userInfo.image
-      };
-      return;
-    }
-
     this.state = {
       avatarSource: "",
-      imageSource: ""
+      imageSource: "",
+      userInfo: userInfo
     };
+
+    if (userInfo && userInfo.avatar) {
+      this.state = {
+        ...this.state,
+        avatarSource: userInfo.avatar
+      };
+    }
+
+    if (userInfo && userInfo.image) {
+      this.state = {
+        ...this.state,
+        imageSource: userInfo.image
+      };
+    }
   }
 
   description = "Change them as often as you need and set up a reminder to remind you daily.  Put the focus on what you want in life and add your affirmation as though you already have it – feel it and the happiness it is giving you because you have achieved it.\n\nInsert an image that makes you feel happy and that you can visualise in your mind when your mind needs to focus on something positive.  This could be your vision board too.";
 
   avatarClicked() {
     ImagePicker.launchImageLibrary(options, response => {
-      console.log('Response = ', response);
-      
       if (response.didCancel) {
         console.log('User cancelled image picker');
       }
@@ -72,9 +75,9 @@ class YouScreen extends Component {
       }
       else {
         // You can also display the image using data:
-        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
         this.setState({
-          avatarSource: { uri: response.uri }
+          ...this.state,
+          avatarSource: `data:image/jpg;base64,${response.data}`,
         });
       }
     });
@@ -82,8 +85,6 @@ class YouScreen extends Component {
 
   selectImage() {
     ImagePicker.launchImageLibrary(options, response => {
-      console.log('Response = ', response);
-      
       if (response.didCancel) {
         console.log('User cancelled image picker');
       }
@@ -95,7 +96,7 @@ class YouScreen extends Component {
       }
       else {
         this.setState({
-          imageSource: { uri: response.uri }
+          imageSource: `data:image/jpg;base64,${response.data}`
         });
       }
     });
@@ -107,11 +108,12 @@ class YouScreen extends Component {
 
   goBack() {
     var userInfo = Object.assign({}, this.props.navigation.state.params.userInfo);
-    if (this.state.imageSource) {
+    if (this.state.imageSource)
       userInfo.image = this.state.imageSource;
-    }
+    if (this.state.avatarSource)
+      userInfo.avatar = this.state.avatarSource;
 
-    AsyncStorage.setItem("userInfo", JSON.stringify(userInfo), (error) => {
+    AsyncStorage.setItem("userinfo", JSON.stringify(userInfo), (error) => {
       if (error) {
         Alert.alert(
           "Error",
@@ -126,6 +128,7 @@ class YouScreen extends Component {
           ],
           { cancelable: false }
         );
+        return;
       }
       this.props.navigation.state.params.refresh();
       this.props.navigation.goBack();
@@ -136,7 +139,7 @@ class YouScreen extends Component {
     return (
       <View style={styles.container}>
         <NavBar
-          title="Robert"
+          title={this.state.userInfo.name}
           left="Back"
           onLeft={ () => this.goBack() }
           right="Set time"
@@ -150,7 +153,7 @@ class YouScreen extends Component {
                 onPress={this.avatarClicked.bind(this)}
               >
                 <Image
-                  source={this.state.avatarSource == "" ? Assets.avatar : this.state.avatarSource}
+                  source={{uri: this.state.avatarSource}}
                   resizeMode="cover"
                   style={styles.avatar}
                 />      
@@ -197,7 +200,7 @@ class YouScreen extends Component {
               this.state.imageSource
               ?
               <TouchableOpacity onPress={this.selectImage.bind(this)}>
-                <Image source={this.state.imageSource} style={ styles.image } resizeMode="cover" />
+                <Image source={{uri: this.state.imageSource}} style={ styles.image } resizeMode="cover" />
               </TouchableOpacity>
               :
               <View style={ styles.imageContainer }>

@@ -3,6 +3,7 @@ package com.youandme;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.chirag.RNMail.RNMail;
 import com.reactlibrary.RNRatePackage;
 import cl.json.RNSharePackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
@@ -29,6 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNMail(),
             new RNRatePackage(),
             new RNSharePackage(),
             new ImageResizerPackage(),
